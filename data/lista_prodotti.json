@@ -1,0 +1,14 @@
+[
+    {
+        "nome": "Banana",
+        "categoria": "Frutta",
+        "prezzo": 12.0,
+        "quantity": 123
+    },
+    {
+        "nome": "Albicocca",
+        "categoria": "Fruta",
+        "prezzo": 12.0,
+        "quantity": 1314
+    }
+]
