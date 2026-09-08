@@ -23,10 +23,15 @@ class ArchivioProdotti:
         if not isinstance(nome,str):
             raise TypeError("Il nome deve essere una stringa")
 
+        if self.__listaProdotti == []:
+            raise ValueError("Nessun prodotto esiste ancora")
+
         for p in self.__listaProdotti:
             if p.get_nome() == nome:
                 self.__listaProdotti.remove(p)
                 return
+
+        raise ValueError("Prodotto non trovato")
 
     def prezzo_max_tra_prodotti(self):
         prezzo_max = self.__listaProdotti[0].get_prezzo()

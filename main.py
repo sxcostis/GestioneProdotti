@@ -1,167 +1,440 @@
-import customtkinter as Ctk
-from customtkinter import CTkLabel, CTkEntry, CTkButton
-from prodotto import Prodotto
+import customtkinter as ctk
 from archivioProdotti import ArchivioProdotti
+from prodotto import Prodotto
 
-def aggiungi_prodotto():
-    nome = Entry1.get()
-    categoria = Entry2.get()
-    prezzo = Entry3.get()
-    quantita = Entry4.get()
+###In caso il prodotto é stato creato va scritto che é stato creato, se invece i valori sono stati inseriti male allora
+###va detto che il prodotto non é stato creato.
 
-    try:
-        prodotto = Prodotto(nome, categoria, float(prezzo), int(quantita))
-        archivio.aggiungi_prodotto(prodotto)
-        aggiorna_lista()
-    except Exception as e:
-        print(f"Errore: {e}")
+###In caso il prodotto é stato cancellato va detto e se non é stato cancellato per problemi va scritto perché
 
-    Entry1.delete(0, "end")
-    Entry2.delete(0, "end")
-    Entry3.delete(0, "end")
-    Entry4.delete(0, "end")
+def vai_ad_rimuovi_prodotto():
+    but_carica.grid_remove()
+    but_salva.grid_remove()
+    but_rimuovi_prodotto.grid_remove()
+    but_info_magazzino.grid_remove()
+    but_aggiungi_prodotti.grid_remove()
 
+    def rimuovi_prodotto():
+        nome = entry_rimuovi_prodotto.get().strip().capitalize()
 
-def aggiorna_lista():
-    Lista_box.configure(state="normal")
-    Lista_box.delete("1.0", "end")
+        if nome != "":
+            try:
+                archivio.rimuovere_prodotto(nome)
+            except ValueError as e:
+                print(e)
 
-    for p in archivio.get_prodotti():
-        Lista_box.insert("end", f"{p}\n\n")
+        entry_rimuovi_prodotto.delete(0, "end")
 
-    Lista_box.configure(state="disabled")
+    def rimuovi_torna_indietro():
+        but_carica.grid()
+        but_salva.grid()
+        but_rimuovi_prodotto.grid()
+        but_info_magazzino.grid()
+        but_aggiungi_prodotti.grid()
 
-def cancella_nome():
-    nome = Entry5.get().capitalize()
-    archivio.rimuovere_prodotto(nome)
-    aggiorna_lista()
-    Entry5.delete(0, "end")
+        text_rimuovi_prodotto.grid_remove()
+        entry_rimuovi_prodotto.grid_remove()
+        but_rimuovi_prodotto_esistente.grid_remove()
+        but_rimuovi_torna_indietro.grid_remove()
 
-def salva_json():
-    testo_8.configure(text="")
-
-    archivio.salva_json()
-
-    testo_8.configure(text="Salvato")
-
-def carica_json():
-    testo_8.configure(text="")
-
-    archivio.carica_json()
-    aggiorna_lista()
-
-    testo_8.configure(text="Caricato")
+        testo.configure(text="Gestione Prodotti")
 
 
+#Testi
+    testo.configure(text="Rimuovi Prodotto")
+
+    text_rimuovi_prodotto = ctk.CTkLabel(
+        frame_sinistra,
+        text="Inserisci Nome",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_rimuovi_prodotto.grid(
+        row=1,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
+
+#Entry
+    entry_rimuovi_prodotto = ctk.CTkEntry(
+        frame_sinistra,
+        width=175,
+        height=38,
+        border_color="black"
+    )
+    entry_rimuovi_prodotto.grid(
+        row=1
+    )
+
+#Bottoni
+    but_rimuovi_prodotto_esistente = ctk.CTkButton(
+        frame_sinistra,
+        text="Rimuovi",
+        font=("Bahnschrift", 24, "bold"),
+        width=200,
+        height=75,
+        command=rimuovi_prodotto
+    )
+    but_rimuovi_prodotto_esistente.grid(
+        row=2,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
+
+    but_rimuovi_torna_indietro = ctk.CTkButton(
+        frame_sinistra,
+        text="Torna Indietro",
+        font=("Bahnschrift", 24, "bold"),
+        width=200,
+        height=75,
+         command=rimuovi_torna_indietro
+    )
+    but_rimuovi_torna_indietro.grid(
+        row=3,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
 
 
 
-app = Ctk.CTk()
-app.title("Registro Elettronico Offline")
-app.geometry("1920x1080")
+
+
+
+def vai_ad_aggiungi():
+    but_carica.grid_remove()
+    but_salva.grid_remove()
+    but_rimuovi_prodotto.grid_remove()
+    but_info_magazzino.grid_remove()
+    but_aggiungi_prodotti.grid_remove()
+
+    def aggiungi_prodotto():
+        nome = entry_aggiungi.get().strip().capitalize()
+        categoria = entry_aggiungi2.get().strip().capitalize()
+        prezzo = entry_aggiungi3.get()
+        quantita = entry_aggiungi4.get()
+
+        try:
+            prezzo = float(prezzo)
+            quantita = int(quantita)
+            prodotto = Prodotto(nome, categoria, prezzo, quantita)
+            archivio.aggiungi_prodotto(prodotto)
+        except ValueError as e:
+            print(e)
+
+        entry_aggiungi.delete(0, "end")
+        entry_aggiungi2.delete(0, "end")
+        entry_aggiungi3.delete(0, "end")
+        entry_aggiungi4.delete(0, "end")
+
+    def torna_indietro():
+        but_carica.grid()
+        but_salva.grid()
+        but_rimuovi_prodotto.grid()
+        but_info_magazzino.grid()
+        but_aggiungi_prodotti.grid()
+
+
+        entry_aggiungi.grid_remove()
+        entry_aggiungi2.grid_remove()
+        entry_aggiungi3.grid_remove()
+        entry_aggiungi4.grid_remove()
+
+        text_aggiungi.grid_remove()
+        text_aggiungi2.grid_remove()
+        text_aggiungi3.grid_remove()
+        text_aggiungi4.grid_remove()
+
+        but_menu_aggiungi.grid_remove()
+        but_aggiungi.grid_remove()
+
+        testo.configure(text="Gestione Prodotti")
+
+
+#Testi
+    testo.configure(text="Aggiungi Prodotto")
+
+    text_aggiungi = ctk.CTkLabel(
+        frame_sinistra,
+        text="Inserisci Nome",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_aggiungi.grid(
+        row=1,
+        column=0,
+        pady=20,
+        padx=(50,0),
+        sticky="w"
+
+    )
+
+    text_aggiungi2 = ctk.CTkLabel(
+        frame_sinistra,
+        text="Inserisci Categoria",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_aggiungi2.grid(
+        row=2,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+
+    )
+
+    text_aggiungi3 = ctk.CTkLabel(
+        frame_sinistra,
+        text="Inserisci Prezzo",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_aggiungi3.grid(
+        row=3,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+
+    )
+
+    text_aggiungi4 = ctk.CTkLabel(
+        frame_sinistra,
+        text="Inserisci Quantitá",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_aggiungi4.grid(
+        row=4,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+
+    )
+
+
+#Entry
+    entry_aggiungi = ctk.CTkEntry(
+        frame_sinistra,
+        width=175,
+        height=38,
+        border_color="black"
+    )
+    entry_aggiungi.grid(
+        row=1,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+    )
+
+    entry_aggiungi2 = ctk.CTkEntry(
+        frame_sinistra,
+        width=175,
+        height=38,
+        border_color="black"
+    )
+    entry_aggiungi2.grid(
+        row=2,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+    )
+
+    entry_aggiungi3 = ctk.CTkEntry(
+        frame_sinistra,
+        width=175,
+        height=38,
+        border_color="black"
+    )
+    entry_aggiungi3.grid(
+        row=3,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+    )
+
+    entry_aggiungi4 = ctk.CTkEntry(
+        frame_sinistra,
+        width=175,
+        height=38,
+        border_color="black"
+    )
+    entry_aggiungi4.grid(
+        row=4,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+    )
+
+
+#Bottoni
+    but_aggiungi = ctk.CTkButton(
+        frame_sinistra,
+        text="Aggiungi",
+        font=("Bahnschrift", 24, "bold"),
+        width=200,
+        height=75,
+        command=aggiungi_prodotto
+    )
+    but_aggiungi.grid(
+        row=5,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
+
+    but_menu_aggiungi = ctk.CTkButton(
+        frame_sinistra,
+        text="Torna Indietro",
+        font=("Bahnschrift", 24, "bold"),
+        width=200,
+        height=75,
+        command=torna_indietro
+    )
+    but_menu_aggiungi.grid(
+        row=6,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
+
+
+
+
+
+
+# Creazione App
+app = ctk.CTk()
+app.geometry("1280x920")
 app.resizable(False, False)
+app.title("Gestione Prodotti Offline")
+
+#Creazione archivio prodotti
 archivio = ArchivioProdotti([])
 
-### Frame sinistra
-frame_sinistra = Ctk.CTkFrame(app, fg_color="transparent")
-frame_sinistra.grid(row=0, column=0, sticky="nsew", padx=25, pady=25)
-frame_destra = Ctk.CTkFrame(app, fg_color="transparent")
-frame_destra.grid(row=0, column=1, sticky="nsew", padx=25, pady=25)
+# Griglia principale
+app.grid_columnconfigure(0, weight=0, minsize=640)
+app.grid_columnconfigure(1, weight=0, minsize=640)
+app.grid_rowconfigure(0, weight=0, minsize=920)
 
-app.grid_columnconfigure(0, weight=1)
-app.grid_columnconfigure(1, weight=3)
-app.grid_rowconfigure(0, weight=1)
+# Frame
+frame_sinistra = ctk.CTkFrame(app, corner_radius=0, fg_color="#FFFFFF")
+frame_sinistra.grid(row=0, column=0, sticky="nsew")
+frame_destra = ctk.CTkFrame(app, corner_radius=0, fg_color="#E6E6E6")
+frame_destra.grid(row=0, column=1, sticky="nsew")
 
-### Input
+# Frame sinistro con righe fisse
+frame_sinistra.grid_columnconfigure(0, weight=0, minsize=640)
+# Prima riga più alta per il titolo
+frame_sinistra.grid_rowconfigure(0, weight=0, minsize=150)
+# Righe successive
+for i in range(1, 8):
+    frame_sinistra.grid_rowconfigure(i, weight=0, minsize=100)
 
+# Titolo (riga 0, più spazio)
+testo = ctk.CTkLabel(
+    frame_sinistra,
+    text="Gestione Prodotti",
+    font=("Bahnschrift", 42, "bold")
+)
+testo.grid(
+    row=0,
+    column=0,
+    pady=20,
+    sticky="n"
+)
 
-riga_nome = Ctk.CTkFrame(frame_sinistra, fg_color="transparent")
-riga_nome.pack(anchor="w", pady=30)
+# Bottoni principali (partono da riga 1)
+but_aggiungi_prodotti = ctk.CTkButton(
+    frame_sinistra,
+    text="Aggiungi prodotto",
+    height=80,
+    corner_radius=10,
+    font=("Bahnschrift", 24, "bold"),
+    command=vai_ad_aggiungi
+)
+but_aggiungi_prodotti.grid(
+    row=1,
+    column=0,
+    padx=80,
+    pady=10,
+    sticky="ew"
+)
 
-testo_1 = CTkLabel(riga_nome, text="Nome:", font=("Bahnschrift", 18))
-testo_1.pack(side="left", padx=10)
+but_rimuovi_prodotto = ctk.CTkButton(
+    frame_sinistra,
+    text="Rimuovi Prodotto",
+    height=80,
+    corner_radius=10,
+    font=("Bahnschrift", 24, "bold"),
+    command=vai_ad_rimuovi_prodotto
+)
+but_rimuovi_prodotto.grid(
+    row=2,
+    column=0,
+    padx=80,
+    pady=10,
+    sticky="ew",
+)
 
-Entry1 = CTkEntry(riga_nome, width=250)
-Entry1.pack(side="left", padx=10)
+but_info_magazzino = ctk.CTkButton(
+    frame_sinistra,
+    text="Info Sul Magazzino",
+    height=80,
+    corner_radius=10,
+    font=("Bahnschrift", 24, "bold"),
+)
+but_info_magazzino.grid(
+    row=3,
+    column=0,
+    padx=80,
+    pady=10,
+    sticky="ew"
+)
 
+# Frame interno per bottoni (riga 4)
+frame_sinistra_interno = ctk.CTkFrame(frame_sinistra, corner_radius=0, fg_color="#FFFFFF")
+frame_sinistra_interno.grid(row=4, column=0, pady=40, sticky="ew")
 
+frame_sinistra_interno.grid_columnconfigure(0, weight=0, minsize=300)
+frame_sinistra_interno.grid_columnconfigure(1, weight=0, minsize=300)
 
-riga_categoria = Ctk.CTkFrame(frame_sinistra, fg_color="transparent")
-riga_categoria.pack(anchor="w", pady=30)
+but_salva = ctk.CTkButton(
+    frame_sinistra_interno,
+    text="Salva",
+    height=60,
+    corner_radius=10,
+    font=("Bahnschrift", 20, "bold"),
+    fg_color="#D9D9D9",
+    text_color="black",
+)
+but_salva.grid(
+    row=0,
+    column=0,
+    padx=(40, 20),
+    pady=10,
+    sticky="ew"
+)
 
-testo_2 = CTkLabel(riga_categoria, text="Categoria:", font=("Bahnschrift", 18))
-testo_2.pack(side="left", padx=10)
-
-Entry2 = CTkEntry(riga_categoria, width=250)
-Entry2.pack(side="left", padx=10)
-
-
-
-riga_prezzo = Ctk.CTkFrame(frame_sinistra, fg_color="transparent")
-riga_prezzo.pack(anchor="w", pady=30)
-
-testo_3 = CTkLabel(riga_prezzo, text="Prezzo:", font=("Bahnschrift", 18))
-testo_3.pack(side="left", padx=10)
-
-Entry3 = CTkEntry(riga_prezzo, width=250)
-Entry3.pack(side="left", padx=10)
-
-
-
-riga_quantita = Ctk.CTkFrame(frame_sinistra, fg_color="transparent")
-riga_quantita.pack(anchor="w", pady=30)
-
-testo_4 = CTkLabel(riga_quantita, text="Quantità:", font=("Bahnschrift", 18))
-testo_4.pack(side="left", padx=10)
-
-Entry4 = CTkEntry(riga_quantita, width=250)
-Entry4.pack(side="left", padx=10)
-
-
-
-button_1 = CTkButton(frame_sinistra, text="Aggiungi", command=aggiungi_prodotto, font=("Bahnschrift", 18))
-button_1.pack(anchor="w", pady=30)
-
-
-
-riga_cancella = Ctk.CTkFrame(frame_sinistra, fg_color="transparent")
-riga_cancella.pack(anchor="w", pady=30)
-
-testo_7 = CTkLabel(riga_cancella, text="Cancella per nome:", font=("Bahnschrift", 18))
-testo_7.pack(side="left", padx=10)
-
-Entry5 = CTkEntry(riga_cancella, width=250)
-Entry5.pack(side="left", padx=10)
-
-button_2 = CTkButton(riga_cancella, text="Cancella", font=("Bahnschrift", 18), command=cancella_nome)
-button_2.pack(side="left", pady=10)
-
-riga_json = Ctk.CTkFrame(frame_sinistra, fg_color="transparent")
-riga_json.pack(anchor="w", pady=30)
-
-button_3 = CTkButton(riga_json, text="Salva",font=("Bahnschrift", 18),command=salva_json)
-button_3.pack(side="left", pady=30, padx=30)
-
-button_4 = CTkButton(riga_json, text="Carica",font=("Bahnschrift", 18), command=carica_json)
-button_4.pack(side="left", pady=30, padx=30)
-
-testo_8 = CTkLabel(frame_sinistra, fg_color="transparent", text="", font=("Bahnschrift", 32))
-testo_8.pack(anchor="nw", padx=10)
-
-
-
-
-### Frame destra
-
-testo_5 = CTkLabel(frame_destra, text="Lista Prodotti", font=("Bahnschrift", 32))
-testo_5.pack(anchor="c", pady=5)
-
-Lista_box = Ctk.CTkTextbox(frame_destra, height=400, border_color="black", pady=5)
-Lista_box.pack(fill="x", anchor="n", pady=10)
-Lista_box.configure(state="disabled")
-
-
-
-
+but_carica = ctk.CTkButton(
+    frame_sinistra_interno,
+    text="Carica",
+    height=60,
+    corner_radius=10,
+    font=("Bahnschrift", 20, "bold"),
+    fg_color="#D9D9D9",
+    text_color="black",
+)
+but_carica.grid(
+    row=0,
+    column=1,
+    padx=(20, 40),
+    pady=10,
+    sticky="ew"
+)
 
 app.mainloop()

@@ -24,19 +24,21 @@ class Prodotto:
             raise TypeError("Categoria non valida")
 
     def set_prezzo(self,prezzo):
-        if prezzo > 0:
-            self.__prezzo = prezzo
-        else:
-            raise TypeError("Prezzo non valido")
+            if prezzo > 0:
+                self.__prezzo = prezzo
+            else:
+                raise TypeError("Prezzo non valido")
+
 
     def get_prezzo(self):
         return self.__prezzo
 
     def set_quantity(self,quantity):
-        if quantity > 0:
-            self._quantity = quantity
-        else:
-            raise TypeError("Quantitá non valida")
+            if quantity > 0:
+                self._quantity = quantity
+            else:
+                raise TypeError("Quantitá non valida")
+
 
     def valore_totale(self):
         return self.__prezzo*self._quantity
