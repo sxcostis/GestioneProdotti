@@ -34,13 +34,15 @@ class ArchivioProdotti:
         raise ValueError("Prodotto non trovato")
 
     def prezzo_max_tra_prodotti(self):
+        if self.__listaProdotti == []:
+            return "Nessun prodotto ancora inserito"
         prezzo_max = self.__listaProdotti[0].get_prezzo()
 
         for p in self.__listaProdotti:
             if p.get_prezzo() > prezzo_max:
                 prezzo_max = p.get_prezzo()
 
-        return prezzo_max
+        return f"{p.get_nome()} - {prezzo_max}€"
 
     def valore_magazzino(self):
         valore_magazzino_list =  [p.valore_totale() for p in self.__listaProdotti ]

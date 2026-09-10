@@ -427,6 +427,7 @@ but_info_magazzino = ctk.CTkButton(
     height=80,
     corner_radius=10,
     font=("Bahnschrift", 24, "bold"),
+    command=vai_ad_info_magazino
 )
 but_info_magazzino.grid(
     row=3,
