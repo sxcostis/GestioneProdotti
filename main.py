@@ -6,6 +6,46 @@ from prodotto import Prodotto
 ###va detto che il prodotto non é stato creato.
 
 ###In caso il prodotto é stato cancellato va detto e se non é stato cancellato per problemi va scritto perché
+def vai_ad_info_magazino():
+    but_carica.grid_remove()
+    but_salva.grid_remove()
+    but_rimuovi_prodotto.grid_remove()
+    but_info_magazzino.grid_remove()
+    but_aggiungi_prodotti.grid_remove()
+
+
+#Testi
+    testo.configure(text="Info Magazino")
+
+    text_prezzo_max = ctk.CTkLabel(
+        frame_sinistra,
+        text=f"Prodotto piú costoso: {archivio.prezzo_max_tra_prodotti()}",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_prezzo_max.grid(
+        row=1,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
+
+    text_valore_magazino = ctk.CTkLabel(
+        frame_sinistra,
+        text=f"Valore Magazzino: {archivio.valore_magazzino()}",
+        font=("Bahnschrift", 20, "bold")
+    )
+    text_valore_magazino.grid(
+        row=2,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
+
+
+
+
 
 def vai_ad_rimuovi_prodotto():
     but_carica.grid_remove()
