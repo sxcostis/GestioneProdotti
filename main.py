@@ -56,7 +56,7 @@ def carica_json():
     )
     mostra_messaggio_temporaneo(testo_messaggio, "Caricamento Eseguito")
 
-def vai_ad_info_magazino():
+def vai_ad_info_magazzino():
     but_carica.grid_remove()
     but_salva.grid_remove()
     but_rimuovi_prodotto.grid_remove()
@@ -72,13 +72,13 @@ def vai_ad_info_magazino():
         but_aggiungi_prodotti.grid()
 
         text_prezzo_max.grid_remove()
-        text_valore_magazino.grid_remove()
+        text_valore_magazzino.grid_remove()
         but_info_torna_indietro.grid_remove()
 
         testo.configure(text="Gestione Prodotti")
 
 #Testi
-    testo.configure(text="Info Magazino")
+    testo.configure(text="Info Magazzino")
 
     text_prezzo_max = ctk.CTkLabel(
         frame_sinistra,
@@ -93,12 +93,12 @@ def vai_ad_info_magazino():
         sticky="w"
     )
 
-    text_valore_magazino = ctk.CTkLabel(
+    text_valore_magazzino = ctk.CTkLabel(
         frame_sinistra,
         text=f"Valore Magazzino: {archivio.valore_magazzino()}",
         font=("Bahnschrift", 20, "bold")
     )
-    text_valore_magazino.grid(
+    text_valore_magazzino.grid(
         row=2,
         column=0,
         pady=20,
@@ -497,7 +497,7 @@ but_info_magazzino = ctk.CTkButton(
     height=80,
     corner_radius=10,
     font=("Bahnschrift", 24, "bold"),
-    command=vai_ad_info_magazino
+    command=vai_ad_info_magazzino
 )
 but_info_magazzino.grid(
     row=3,
