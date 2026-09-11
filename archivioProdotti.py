@@ -58,6 +58,8 @@ class ArchivioProdotti:
         with open('data/lista_prodotti.json', 'r') as json_file:
             lista_prodotti = json.load(json_file)
 
+            self.__listaProdotti = []
+
             for d in lista_prodotti:
                 p = Prodotto(
                     d["nome"],
@@ -69,21 +71,3 @@ class ArchivioProdotti:
 
     def get_prodotti(self):
         return self.__listaProdotti
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

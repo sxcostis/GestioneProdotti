@@ -6,6 +6,56 @@ from prodotto import Prodotto
 ###va detto che il prodotto non é stato creato.
 
 ###In caso il prodotto é stato cancellato va detto e se non é stato cancellato per problemi va scritto perché
+
+def mostra_messaggio_temporaneo(testo_label, messaggio):
+    testo_label.configure(text=messaggio)
+    app.after(1000, lambda: testo_label.configure(text=""))
+
+def aggiorna_lista():
+    Lista_box.configure(state="normal")
+    Lista_box.delete("1.0", "end")
+
+    for p in archivio.get_prodotti():
+        Lista_box.insert("end", f"{p}\n\n")
+
+    Lista_box.configure(state="disabled")
+
+
+def salva_json():
+    archivio.salva_json()
+
+    testo_messaggio = ctk.CTkLabel(
+        frame_sinistra,
+        text="",
+        font=("Bahnschrift", 20, "bold"),
+        state="disabled"
+    )
+    testo_messaggio.grid(
+        row=5,
+        column=0,
+        pady=20
+    )
+    mostra_messaggio_temporaneo(testo_messaggio, "Salvataggio Eseguito")
+
+
+
+def carica_json():
+    archivio.carica_json()
+    aggiorna_lista()
+
+    testo_messaggio = ctk.CTkLabel(
+        frame_sinistra,
+        text="",
+        font=("Bahnschrift", 20, "bold"),
+        state="disabled"
+    )
+    testo_messaggio.grid(
+        row=5,
+        column=0,
+        pady=20
+    )
+    mostra_messaggio_temporaneo(testo_messaggio, "Caricamento Eseguito")
+
 def vai_ad_info_magazino():
     but_carica.grid_remove()
     but_salva.grid_remove()
@@ -13,6 +63,19 @@ def vai_ad_info_magazino():
     but_info_magazzino.grid_remove()
     but_aggiungi_prodotti.grid_remove()
 
+
+    def info_magazzino_torna_indietro():
+        but_carica.grid()
+        but_salva.grid()
+        but_rimuovi_prodotto.grid()
+        but_info_magazzino.grid()
+        but_aggiungi_prodotti.grid()
+
+        text_prezzo_max.grid_remove()
+        text_valore_magazino.grid_remove()
+        but_info_torna_indietro.grid_remove()
+
+        testo.configure(text="Gestione Prodotti")
 
 #Testi
     testo.configure(text="Info Magazino")
@@ -42,9 +105,22 @@ def vai_ad_info_magazino():
         padx=(50, 0),
         sticky="w"
     )
-
-
-
+#Bottini
+    but_info_torna_indietro = ctk.CTkButton(
+        frame_sinistra,
+        text="Torna Indietro",
+        font=("Bahnschrift", 24, "bold"),
+        width=200,
+        height=75,
+        command=info_magazzino_torna_indietro
+    )
+    but_info_torna_indietro.grid(
+        row=3,
+        column=0,
+        pady=20,
+        padx=(50, 0),
+        sticky="w"
+    )
 
 
 def vai_ad_rimuovi_prodotto():
@@ -64,6 +140,7 @@ def vai_ad_rimuovi_prodotto():
                 print(e)
 
         entry_rimuovi_prodotto.delete(0, "end")
+        aggiorna_lista()
 
     def rimuovi_torna_indietro():
         but_carica.grid()
@@ -141,10 +218,6 @@ def vai_ad_rimuovi_prodotto():
     )
 
 
-
-
-
-
 def vai_ad_aggiungi():
     but_carica.grid_remove()
     but_salva.grid_remove()
@@ -170,6 +243,7 @@ def vai_ad_aggiungi():
         entry_aggiungi2.delete(0, "end")
         entry_aggiungi3.delete(0, "end")
         entry_aggiungi4.delete(0, "end")
+        aggiorna_lista()
 
     def torna_indietro():
         but_carica.grid()
@@ -343,39 +417,35 @@ def vai_ad_aggiungi():
     )
 
 
-
-
-
-
-# Creazione App
+#Creazione App
 app = ctk.CTk()
 app.geometry("1280x920")
 app.resizable(False, False)
 app.title("Gestione Prodotti Offline")
 
-#Creazione archivio prodotti
+#Archivio
 archivio = ArchivioProdotti([])
 
-# Griglia principale
+#Griglia principale
 app.grid_columnconfigure(0, weight=0, minsize=640)
 app.grid_columnconfigure(1, weight=0, minsize=640)
 app.grid_rowconfigure(0, weight=0, minsize=920)
 
-# Frame
+#Frame
 frame_sinistra = ctk.CTkFrame(app, corner_radius=0, fg_color="#FFFFFF")
 frame_sinistra.grid(row=0, column=0, sticky="nsew")
 frame_destra = ctk.CTkFrame(app, corner_radius=0, fg_color="#E6E6E6")
 frame_destra.grid(row=0, column=1, sticky="nsew")
 
-# Frame sinistro con righe fisse
+#Frame sinistro
 frame_sinistra.grid_columnconfigure(0, weight=0, minsize=640)
-# Prima riga più alta per il titolo
+#Titolo
 frame_sinistra.grid_rowconfigure(0, weight=0, minsize=150)
-# Righe successive
+#Righe successive
 for i in range(1, 8):
     frame_sinistra.grid_rowconfigure(i, weight=0, minsize=100)
 
-# Titolo (riga 0, più spazio)
+#Titolo
 testo = ctk.CTkLabel(
     frame_sinistra,
     text="Gestione Prodotti",
@@ -388,7 +458,7 @@ testo.grid(
     sticky="n"
 )
 
-# Bottoni principali (partono da riga 1)
+#Bottoni principali
 but_aggiungi_prodotti = ctk.CTkButton(
     frame_sinistra,
     text="Aggiungi prodotto",
@@ -437,7 +507,7 @@ but_info_magazzino.grid(
     sticky="ew"
 )
 
-# Frame interno per bottoni (riga 4)
+#Frame interno per bottoni
 frame_sinistra_interno = ctk.CTkFrame(frame_sinistra, corner_radius=0, fg_color="#FFFFFF")
 frame_sinistra_interno.grid(row=4, column=0, pady=40, sticky="ew")
 
@@ -452,6 +522,7 @@ but_salva = ctk.CTkButton(
     font=("Bahnschrift", 20, "bold"),
     fg_color="#D9D9D9",
     text_color="black",
+    command=salva_json
 )
 but_salva.grid(
     row=0,
@@ -469,6 +540,7 @@ but_carica = ctk.CTkButton(
     font=("Bahnschrift", 20, "bold"),
     fg_color="#D9D9D9",
     text_color="black",
+    command=carica_json
 )
 but_carica.grid(
     row=0,
@@ -477,5 +549,23 @@ but_carica.grid(
     pady=10,
     sticky="ew"
 )
+
+#Frame destra textbox
+Lista_box = ctk.CTkTextbox(
+    frame_destra,
+    width=600,
+    height=800,
+    border_width=4,
+    corner_radius=10,
+    font=("Bahnschrift", 18)
+)
+Lista_box.pack(
+    fill="both",
+    expand=True,
+    padx=20,
+    pady=20)
+
+Lista_box.configure(state="disabled")
+
 
 app.mainloop()
